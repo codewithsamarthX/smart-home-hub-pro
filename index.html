@@ -44,13 +44,10 @@
       border: 1px solid var(--border-color);
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       border-radius: 12px;
-      padding: 14px; 
-    }
-    @media(min-width: 640px){
-      .card { padding: 18px; } 
+      padding: 18px; /* MODIFIED: Reverted to 18px for all sizes, looks better */
     }
     
-    /* MODIFIED: Ghost card is now interactive */
+    /* Ghost card */
     .card-ghost{
       background: transparent;
       border: 2px dashed #cbd5e1;
@@ -58,7 +55,6 @@
       cursor: pointer;
       transition: border-color 0.2s ease, background-color 0.2s ease;
     }
-    /* ADDED: Hover effect for the new card */
     .card-ghost:hover {
       border-color: var(--accent);
       background: #fafaff;
@@ -68,7 +64,7 @@
       color: var(--accent);
     }
     .ghost-icon {
-      color: #94a3b8; /* Muted plus icon */
+      color: #94a3b8; 
       transition: color 0.2s ease;
     }
 
@@ -106,31 +102,39 @@
       color: var(--text-main);
     }
 
-    /* grid */
+    /* MODIFIED: This is the 1 -> 2 -> 3 column layout fix */
     .grid{
       display:grid;
-      grid-template-columns:repeat(2,1fr); 
-      gap: 12px; 
+      grid-template-columns:repeat(1,1fr); /* 1 column for mobile */
+      gap: 18px; /* Consistent gap */
       margin-top:18px;
     }
     @media(min-width: 640px) {
-      .grid { gap: 18px; } 
+      .grid{grid-template-columns:repeat(2,1fr);} /* 2 columns for tablet */
     }
     @media(min-width:1024px){
-      .grid{grid-template-columns:repeat(3,1fr);} 
+      .grid{grid-template-columns:repeat(3,1fr);} /* 3 columns for desktop */
     }
     
+    /* MODIFIED: Reset responsive span rules */
     .grid > .card-ghost:last-child:nth-child(odd) {
-      grid-column: span 2;
+      grid-column: span 1;
+    }
+    @media(min-width: 640px) {
+      .grid > .card-ghost:last-child:nth-child(odd) {
+        grid-column: span 2; /* Span full on 2-col layout */
+      }
     }
     @media(min-width:1024px){
       .grid > .card-ghost:last-child:nth-child(odd) {
-        grid-column: span 1; 
+        grid-column: span 1; /* Reset on 3-col layout */
       }
+      /* Handle 3-col last item if it's the 2nd in a row */
       .grid > .card-ghost:last-child:nth-child(3n - 1) {
         grid-column: span 2;
       }
     }
+
 
     /* device card styles */
     .device-head{display:flex;align-items:center;gap:12px}
@@ -352,7 +356,7 @@
       footer{flex-direction:row; padding: 16px 28px;}
     }
     
-    /* MODIFIED: modal styles */
+    /* modal styles */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(10px);z-index:100;display:none;align-items:center;justify-content:center; padding: 16px;}
     .modal-content{
       background: var(--bg-card); 
@@ -360,14 +364,14 @@
       padding:24px;
       border-radius:14px;
       box-shadow:0 20px 60px rgba(0,0,0,0.2); 
-      width:100%; /* MODIFIED: Full width on mobile */
+      width:100%; 
       max-width:400px;
       z-index:101
     }
     .modal-close{float:right;cursor:pointer;background:transparent;border:none;color:var(--text-main);opacity:0.6} 
     .modal-close:hover{opacity:1}
 
-    /* ADDED: Spinner animation */
+    /* Spinner animation */
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
@@ -377,7 +381,7 @@
       color: var(--accent);
     }
     
-    /* ADDED: Device list styles */
+    /* Device list styles */
     .device-list-item {
       display: flex;
       align-items: center;
@@ -460,8 +464,8 @@
               <div class="font-semibold">Living Light</div> 
               <div class="muted">Hue & intensity</div>
             </div>
-            <div class="ml-auto flex items-center gap-2"> 
-              <div class="muted" style="font-size: 12px;"><span id="light-status">On</span></div> 
+            <div class="ml-auto flex items-center gap-3"> 
+              <div class="muted">Status: <span id="light-status">On</span></div> 
               <label class="toggle-switch">
                 <input type="checkbox" id="light-toggle">
                 <span class="toggle-slider"></span>
@@ -491,14 +495,12 @@
             </div>
             <div class="ml-auto text-right">
               <div id="temp-display" class="text-2xl font-bold">68°</div>
-              <div id="temp-mode-display" class="muted">Off</div> 
-            </div>
+              <div id="temp-mode-display" class="muted">Mode: Off</div> </div>
           </div>
 
           <div class="flex items-center gap-3 mb-3">
             <button id="temp-down" class="px-4 py-2 rounded-lg card" style="background: #f1f5f9; border-color: transparent;">-</button>
-            <div class="flex-1 text-center muted" style="font-size: 12px;">Adjust temp</div> 
-            <button id="temp-up" class="px-4 py-2 rounded-lg card" style="background: #f1f5f9; border-color: transparent;">+</button>
+            <div class="flex-1 text-center muted">Adjust temp</div> <button id="temp-up" class="px-4 py-2 rounded-lg card" style="background: #f1f5f9; border-color: transparent;">+</button>
           </div>
 
           <div class="flex gap-2">
@@ -512,11 +514,9 @@
           <div class="device-head mb-4">
             <div class="device-icon"><i data-lucide="speaker" class="w-5 h-5"></i></div>
             <div>
-              <div class="font-semibold">Speaker</div> 
-              <div class="muted">Playback</div> 
+              <div class="font-semibold">Living Speaker</div> <div class="muted">Playback</div> 
             </div>
-            <div class="ml-auto muted text-right" style="max-width: 80px;"> 
-              Now: <span id="now-playing-text" class="truncate block">Idle</span>
+            <div class="ml-auto muted text-right" style="max-width: 100px;"> Now: <span id="now-playing-text" class="truncate block">Idle</span>
             </div>
           </div>
 
@@ -545,9 +545,7 @@
               <div class="font-semibold">Bedroom Fan</div>
               <div class="muted">Speed control</div>
             </div>
-            <div class="ml-auto flex items-center gap-2"> 
-              <div class="muted text-right" style="font-size: 12px;">Speed: <span id="fan-speed-label">2</span></div> 
-              <label class="toggle-switch">
+            <div class="ml-auto flex items-center gap-3"> <div class="muted text-right">Speed: <span id="fan-speed-label">2</span></div> <label class="toggle-switch">
                 <input type="checkbox" id="fan-toggle">
                 <span class="toggle-slider"></span>
               </label>
@@ -609,6 +607,7 @@
   <audio id="audio-player" preload="metadata" crossOrigin="anonymous"></audio>
 
   <script>
+  // All JavaScript is identical to the previous version
   if (window.lucide) lucide.createIcons();
 
   const SmartHub = {
@@ -632,7 +631,6 @@
       mockWeather:[{desc:'Sunny',temp:78,icon:'sun'},{desc:'Cloudy',temp:72,icon:'cloud'},{desc:'Rain',temp:67,icon:'cloud-rain'}],
       colorMap:{red:0,orange:30,yellow:60,green:120,cyan:180,blue:240,purple:270,pink:330},
       
-      // ADDED: Simulated devices to "discover"
       mockDiscoveredDevices: [
         { name: 'Guest Room Lamp', icon: 'lamp' },
         { name: 'Smart TV (Samsung)', icon: 'tv' },
@@ -646,7 +644,7 @@
       this.cacheUI();
       this.Persistence.load();
       this.Event.bind(); 
-      this.Modal.init(); // ADDED: Initialize modal logic
+      this.Modal.init(); 
       this.Audio.init();
       this.Speech.init();
       this.Header.updateClock();
@@ -676,14 +674,11 @@
         speakerVol:document.getElementById('speaker-volume'),playBtn:document.getElementById('play-pause'),playIcon:document.getElementById('play-icon'),pauseIcon:document.getElementById('pause-icon'),
         prevBtn:document.getElementById('prev-track'),nextBtn:document.getElementById('next-track'),nowText:document.getElementById('now-playing-text'),trackProgress:document.getElementById('track-progress'),viz:document.getElementById('audio-viz'),audioEl:document.getElementById('audio-player'),
         scenes:document.querySelectorAll('[data-scene]'),micBtn:document.getElementById('mic-button'),voiceToast:document.getElementById('voice-toast'),
-        
-        // REMOVED: Modal elements, they are now in SmartHub.Modal.UI
       };
     },
     
-    // ADDED: New object to manage all modal logic
     Modal: {
-      UI: {}, // Cache for modal-specific elements
+      UI: {}, 
       
       init() {
         this.UI = {
@@ -705,7 +700,6 @@
       
       open() {
         this.UI.modal.style.display = 'flex';
-        // 1. Show spinner
         this.UI.contentArea.innerHTML = `
           <div class="flex flex-col items-center justify-center h-full" style="min-height: 150px;">
             <i data-lucide="loader" class="w-10 h-10 spinner"></i>
@@ -714,13 +708,11 @@
         `;
         lucide.createIcons();
         
-        // 2. Simulate discovery
         setTimeout(() => this.showDiscoveredDevices(), 2000);
       },
       
       close() {
         this.UI.modal.style.display = 'none';
-        // Clear content to reset modal for next time
         this.UI.contentArea.innerHTML = '';
       },
       
@@ -731,7 +723,6 @@
           return;
         }
         
-        // 3. Build and show device list
         let listHTML = '<div>';
         devices.forEach(device => {
           listHTML += `
@@ -749,7 +740,6 @@
         this.UI.contentArea.innerHTML = listHTML;
         lucide.createIcons();
         
-        // 4. Add event listeners to the new "Add" buttons
         this.UI.contentArea.querySelectorAll('.device-add-button').forEach(button => {
           button.addEventListener('click', (e) => {
             this.addDevice(e.target.dataset.deviceName);
@@ -758,7 +748,6 @@
       },
       
       addDevice(name) {
-        // 5. Show success message
         this.UI.contentArea.innerHTML = `
           <div class="flex flex-col items-center justify-center h-full" style="min-height: 150px;">
             <i data-lucide="check-circle" class="w-10 h-10 text-green-500"></i>
@@ -767,7 +756,6 @@
         `;
         lucide.createIcons();
         
-        // 6. Close modal after a short delay
         setTimeout(() => this.close(), 1500);
       }
     },
@@ -821,7 +809,7 @@
       updateThermo(){ 
         const s = SmartHub.state.thermostat;
         SmartHub.UI.tempDisplay.textContent = s.temperature+ '\u00B0'; 
-        SmartHub.UI.tempMode.textContent = s.mode; 
+        SmartHub.UI.tempMode.textContent = "Mode: " + s.mode; // MODIFIED: Restored label
         SmartHub.UI.modeButtons.forEach(btn => {
           if (btn.dataset.mode === s.mode) {
             btn.classList.add('active');
@@ -870,7 +858,6 @@
 
     Event:{
       bind(){
-        // MODIFIED: Modal events are now handled in SmartHub.Modal
         const UI = SmartHub.UI;
         UI.scenes.forEach(el=> el.addEventListener('click', e=> SmartHub.runScene(e.currentTarget.dataset.scene)));
         
